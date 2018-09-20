@@ -1,0 +1,41 @@
+@Override
+	public ArrayList<Hotel> displayHotels() 
+	{
+
+		ArrayList<Hotel> hList;
+		try
+		{
+			hList = new ArrayList<Hotel>();
+			con=DBUtil.getConn();
+			String selectqry="SELECT * from Hotel";
+			st=con.createStatement();
+			rs=st.executeQuery(selectqry);
+			while(rs.next())
+			{
+				hList.add(new Hotel(rs.getString("hotel_id"),rs.getString("city"),rs.getString("hotel_name"),
+									rs.getString("address"),rs.getString("description"),rs.getString("cost"),
+									rs.getString("phno_no1"),rs.getString("phno_no2"),rs.getString("rating"),
+									rs.getString("email"),rs.getString("fax")));
+			}
+		}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+				throw new HotelBookingException("Error");
+			}
+		finally
+		{
+			try
+			{
+				st.close();
+				rs.close();
+				con.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+				throw new HotelBookingException(e.getMessage());
+			}
+		}
+		return hList;
+	}
